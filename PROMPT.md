@@ -1,5 +1,5 @@
 Z-services
-zf260605.1220
+zf260605.1100, zf260606.1218
 
 
 # Buts
@@ -13,41 +13,53 @@ J'aimerai faire une petite application pour smartphone PWA offline qui est dépl
 
 * Je veux qu'elle soit déployée dans une Github Pages lors de chaque commit
 
+* Contraintes techniques absolues que tu dois respecter dans tout le code que tu vas générer :
+
+    - Dérivation de clé : Utilise uniquement PBKDF2 (via l'API native Web Crypto Subtle) avec SHA-256, un Salt unique généré aléatoirement par crypto.getRandomValues(), et un minimum de 600 000 itérations pour dériver le mot de passe maître en clé AES.
+    - Chiffrement : Utilise l'algorithme AES-GCM (256 bits) natif pour chiffrer et déshiffrer les données des mots de passe. Chaque chiffrement doit utiliser un vecteur d'initialisation (IV) de 12 octets unique et régénéré à chaque fois.
+    - Gestion de la mémoire : Évite au maximum de stocker les mots de passe dans des chaînes de caractères (strings) persistantes en JavaScript. Privilégie l'utilisation de Uint8Array et propose une fonction pour écraser (wipe) la mémoire avec des zéros (.fill(0)) après utilisation.
+    - Ne stocke JAMAIS le mot de passe maître ni la clé dérivée. Stocke uniquement le sel (Salt), le vecteur d'initialisation (IV) et le blob chiffré (cipher text + auth tag).
+    - Ajoute un mécanisme de verrouillage automatique après X minutes d'inactivité (qui efface la clé dérivée de la mémoire de l'application).
+    - Ne propose aucune bibliothèque externe obsolète comme CryptoJS ou sjcl. Utilise uniquement l'API Web Crypto.
 
 
 # Features
 
-Comme champs du record de la db je veux
-
+Je veux comme champs du record de la db:
 * Nom du service 
 * IP du service 
 * URL du service
 * Description du service
-* Tag de classification du service
+* Tags (plusieurs) de classification du service
 * String1 de connexion SSH (user@ip)
-* Info1 'text' qui dit quel type de password est utilisé pour se souvenir où chercher le password pour la connexion ssh
+* Password1 de connexion SSH
 * String2 de connexion SSH (user@ip)
-* Info2 'text' qui dit quel type de password est utilisé pour se souvenir où chercher le password pour la connexion ssh
+* Password2 de connexion SSH
 * User1 de connexion HTML 
-* Info1 'text' qui dit quel type de password est utilisé pour se souvenir où chercher le password pour la connexion HTML
+* Password1 de connexion HTML
 * User2 de connexion HTML 
-* Info2 'text' qui dit quel type de password est utilisé pour se souvenir où chercher le password pour la connexion HTML
-Note du service
-Date de création 
-Date de modification 
+* Password2 de connexion HTML
+* Note du service
+* Date de création 
+* Date de modification 
+
+Le formulaire de lecture d'un record apparaît quand on clique sur un record dans la recherche ou liste de records et n'a pas de bordures des champs (pas de textbox mais des labels).Les TAGS de qualification sont simplement séparés par des virgule. C'est seulement quand on passe en mode modification ou création que les textbox apparaissent.
+
+Les champs passwords sont chiffrées et cachés avec des *. Quand on clique dessus un code de déchiffrement au niveau de l'application, valable 10 minutes est demandé. Le code n'est plus caché quand on maintient le clic sur le champs, au moment où on relâche c'est à nouveau caché.
 
 Je veux pouvoir rechercher en full text dans tous les champs, c'est à dire mettre que des bouts de champs séparés par des espaces qui font office de 'and' booléen. Avec affichage en temps réel du résultat.
 
 Je veux pouvoir créer, modifier, supprimer facilement tous les records.
 
-Je veux pouvoir exporter ou importer toute la db en csv. 
+Je veux pouvoir exporter ou importer toute la db en csv. Les passwords seront chiffrés.
+Lors de l'importation, il y aura remise à zéro de la db (pas de fusion) avec un message indiquant la confirmation ou annulation !
 
 Je veux pouvoir exporter ou importer en JSON la configuration de l'application.
 
-Je veux avoir une sortie en mode liste avec choix des champs nom du service, IP, url, date modification et pouvoir filtrer et trier sur cette page.
+Je veux avoir un formulaire liste des records avec les champs nom du service, IP, url, date modification et pouvoir filtrer et trier sur les colonnes. Il y a des ruptures de pages à 10 records.
 
-Lors de la création modification d'un record, les tags de classification se présentent comme une liste à choix. Les tags sont sous forme de bulles avec une croix pour les effacer et un plus à droite pour en ajouter.
-Je veux aussi un formulaire de gestion des tags.
+Lors de la création ou modification d'un record. Les tags de classification sont sous forme de bulles avec une croix pour les effacer et un plus à droite pour en ajouter, alors les tags se présentent dans une liste à choix. 
+Je veux aussi un formulaire pour la gestion des tags.
 
 Je veux que tout ce qui n'est pas important comme tags, export, import, about, help se trouvent dans un hamburger afin de simplifier l'utilisation sur un smartphone.
 
