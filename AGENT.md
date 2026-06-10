@@ -15,8 +15,7 @@
 ## Règles du projet
 
 - Toujours pousser sur `master` pour permettre le test direct sur GitHub Pages.
-- Le déploiement GitHub Pages se fait en mode **Deploy from branch**.
-- Le dossier publié est `docs/`.
+- Le déploiement GitHub Pages se fait en mode **Deploy from branch** dans la branche **gh-pages***.
 - Chaque commit doit être atomique et en français.
 - Préfixes de commit autorisés : `new`, `change`, `fixe`, `refact`, `del`.
 - Après une modification utile, ne pas attendre : commit + push.
@@ -25,7 +24,7 @@
 - Un changement de documentation, prompt, kanban ou notes peut être poussé sans bump de version ni redéploiement applicatif.
 - Si le workflow de version/release casse, corriger le workflow avant de continuer.
 - Le serveur local de dev / validation doit rester sur le port `4173`.
-- Fermer tout autre serveur web concurrent sur `4174` ou autre port similaire avant validation.
+- Fermer tout autre serveur web ou autre port similaire avant validation.
 - Ne jamais valider une UI sur le DOM seul : la preuve visuelle locale est obligatoire.
 
 ## Avant de finir une tâche

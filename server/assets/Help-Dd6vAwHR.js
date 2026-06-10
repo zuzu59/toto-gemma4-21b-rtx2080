@@ -1,0 +1,1 @@
+import{_ as t,o,c,a as s}from"./index-DbfqMXoQ.js";const n={},a={class:"p-4"};function l(r,e){return o(),c("div",a,[...e[0]||(e[0]=[s("h2",{class:"text-2xl font-bold"},"Help",-1),s("p",null,"Aide",-1)])])}const d=t(n,[["render",l]]);export{d as default};
